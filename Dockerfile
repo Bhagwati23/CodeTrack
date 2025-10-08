@@ -20,8 +20,10 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy the rest of the application
 COPY . .
 
-# Create a non-root user
-RUN useradd --create-home --shell /bin/bash app && chown -R app:app /app
+# Create a non-root user and set permissions
+RUN useradd --create-home --shell /bin/bash app && \
+    chmod +x /app/start.sh && \
+    chown -R app:app /app
 USER app
 
 # Expose port
@@ -34,10 +36,6 @@ ENV PYTHONUNBUFFERED=1
 # Health check
 HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
     CMD curl -f http://localhost:5000/ || exit 1
-
-# Copy and make startup script executable
-COPY start.sh /app/start.sh
-RUN chmod +x /app/start.sh
 
 # Run the application using the startup script
 CMD ["/app/start.sh"]
