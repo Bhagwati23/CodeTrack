@@ -1,0 +1,581 @@
+{% extends "base.html" %}
+
+{% block title %}CodeTrack Pro - Advanced Coding Learning Platform{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container">
+        <div class="row items-center" style="min-height: 80vh;">
+            <div class="col-md-6">
+                <div class="hero-content animate-fadeIn">
+                    <h1 class="hero-title mb-4">
+                        Master Coding with 
+                        <span class="text-gradient">AI-Powered Learning</span>
+                    </h1>
+                    <p class="hero-subtitle text-secondary mb-4">
+                        Join thousands of developers who are advancing their coding skills with CodeTrack Pro. 
+                        Get personalized AI tutoring, participate in coding contests, and collaborate with peers.
+                    </p>
+                    <div class="hero-stats mb-4">
+                        <div class="d-flex gap-4">
+                            <div class="stat-item">
+                                <div class="stat-number text-gradient">10K+</div>
+                                <div class="stat-label text-secondary">Active Learners</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number text-gradient">50K+</div>
+                                <div class="stat-label text-secondary">Problems Solved</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number text-gradient">95%</div>
+                                <div class="stat-label text-secondary">Success Rate</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="hero-actions">
+                        <a href="{{ url_for('auth.register') }}" class="btn btn-primary btn-lg me-3">
+                            <i class="fas fa-rocket"></i>
+                            Start Learning Free
+                        </a>
+                        <a href="{{ url_for('main.about') }}" class="btn btn-secondary btn-lg">
+                            <i class="fas fa-play"></i>
+                            Watch Demo
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="hero-visual animate-fadeIn" style="animation-delay: 0.2s;">
+                    <div class="code-preview glass">
+                        <div class="code-preview-header">
+                            <div class="d-flex gap-2">
+                                <div class="code-dot" style="background: #ff5f56;"></div>
+                                <div class="code-dot" style="background: #ffbd2e;"></div>
+                                <div class="code-dot" style="background: #27ca3f;"></div>
+                            </div>
+                            <span class="text-secondary">main.py</span>
+                        </div>
+                        <div class="code-preview-body">
+                            <pre class="code-snippet"><code><span class="keyword">def</span> <span class="function">solve_problem</span>():
+    <span class="comment"># AI-guided solution</span>
+    <span class="variable">result</span> = <span class="string">"Success!"</span>
+    <span class="keyword">return</span> <span class="variable">result</span>
+
+<span class="comment"># Track your progress</span>
+<span class="variable">progress</span> = <span class="number">95</span><span class="operator">%</span>
+<span class="function">print</span>(<span class="string">f"Level up: {progress}"</span>)</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="features-section py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="section-title">Why Choose CodeTrack Pro?</h2>
+            <p class="section-subtitle text-secondary">
+                Advanced features designed to accelerate your coding journey
+            </p>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <div class="feature-card glass-card hover-lift">
+                    <div class="feature-icon mb-3">
+                        <i class="fas fa-robot text-gradient"></i>
+                    </div>
+                    <h4 class="feature-title">AI-Powered Tutoring</h4>
+                    <p class="feature-description text-secondary">
+                        Get personalized guidance from our advanced AI tutor that adapts to your learning style and pace.
+                    </p>
+                    <ul class="feature-list">
+                        <li>Interactive coding sessions</li>
+                        <li>Real-time feedback</li>
+                        <li>Personalized study plans</li>
+                        <li>24/7 availability</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="col-md-4 mb-4">
+                <div class="feature-card glass-card hover-lift">
+                    <div class="feature-icon mb-3">
+                        <i class="fas fa-trophy text-gradient"></i>
+                    </div>
+                    <h4 class="feature-title">Live Coding Contests</h4>
+                    <p class="feature-description text-secondary">
+                        Participate in real-time coding competitions with secure code execution and instant results.
+                    </p>
+                    <ul class="feature-list">
+                        <li>Real-time leaderboards</li>
+                        <li>Multiple programming languages</li>
+                        <li>Secure sandbox execution</li>
+                        <li>Instant feedback</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="col-md-4 mb-4">
+                <div class="feature-card glass-card hover-lift">
+                    <div class="feature-icon mb-3">
+                        <i class="fas fa-users text-gradient"></i>
+                    </div>
+                    <h4 class="feature-title">Collaborative Learning</h4>
+                    <p class="feature-description text-secondary">
+                        Join study groups, participate in forums, and learn together with a community of passionate coders.
+                    </p>
+                    <ul class="feature-list">
+                        <li>Study group matching</li>
+                        <li>Anonymous Q&A forum</li>
+                        <li>Peer code reviews</li>
+                        <li>Knowledge sharing</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row mt-4">
+            <div class="col-md-4 mb-4">
+                <div class="feature-card glass-card hover-lift">
+                    <div class="feature-icon mb-3">
+                        <i class="fas fa-brain text-gradient"></i>
+                    </div>
+                    <h4 class="feature-title">Spaced Repetition</h4>
+                    <p class="feature-description text-secondary">
+                        Optimize your learning with scientifically-proven spaced repetition algorithms for long-term retention.
+                    </p>
+                    <ul class="feature-list">
+                        <li>SM-2 algorithm implementation</li>
+                        <li>AI-generated flashcards</li>
+                        <li>Adaptive scheduling</li>
+                        <li>Progress tracking</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="col-md-4 mb-4">
+                <div class="feature-card glass-card hover-lift">
+                    <div class="feature-icon mb-3">
+                        <i class="fas fa-chart-line text-gradient"></i>
+                    </div>
+                    <h4 class="feature-title">Progress Tracking</h4>
+                    <p class="feature-description text-secondary">
+                        Monitor your coding journey across multiple platforms with detailed analytics and insights.
+                    </p>
+                    <ul class="feature-list">
+                        <li>Multi-platform integration</li>
+                        <li>Detailed analytics</li>
+                        <li>Streak tracking</li>
+                        <li>Performance insights</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="col-md-4 mb-4">
+                <div class="feature-card glass-card hover-lift">
+                    <div class="feature-icon mb-3">
+                        <i class="fas fa-code text-gradient"></i>
+                    </div>
+                    <h4 class="feature-title">Code Execution</h4>
+                    <p class="feature-description text-secondary">
+                        Run your code securely in multiple programming languages with real-time execution results.
+                    </p>
+                    <ul class="feature-list">
+                        <li>Python, Java, C++, C support</li>
+                        <li>Secure sandbox environment</li>
+                        <li>Real-time execution</li>
+                        <li>Memory and time limits</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Platform Integration Section -->
+<section class="platform-section py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="section-title">Connect Your Coding Platforms</h2>
+            <p class="section-subtitle text-secondary">
+                Sync your progress from popular coding platforms
+            </p>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-3 col-6 mb-4">
+                <div class="platform-card glass-card text-center hover-lift">
+                    <div class="platform-icon mb-3">
+                        <i class="fab fa-python" style="color: var(--leetcode-color); font-size: 3rem;"></i>
+                    </div>
+                    <h5>LeetCode</h5>
+                    <p class="text-secondary">Sync your problem-solving progress and contest ratings</p>
+                </div>
+            </div>
+            
+            <div class="col-md-3 col-6 mb-4">
+                <div class="platform-card glass-card text-center hover-lift">
+                    <div class="platform-icon mb-3">
+                        <i class="fas fa-code" style="color: var(--geeksforgeeks-color); font-size: 3rem;"></i>
+                    </div>
+                    <h5>GeeksforGeeks</h5>
+                    <p class="text-secondary">Track your learning journey and solved problems</p>
+                </div>
+            </div>
+            
+            <div class="col-md-3 col-6 mb-4">
+                <div class="platform-card glass-card text-center hover-lift">
+                    <div class="platform-icon mb-3">
+                        <i class="fas fa-code-branch" style="color: var(--hackerrank-color); font-size: 3rem;"></i>
+                    </div>
+                    <h5>HackerRank</h5>
+                    <p class="text-secondary">Monitor your skill development and certifications</p>
+                </div>
+            </div>
+            
+            <div class="col-md-3 col-6 mb-4">
+                <div class="platform-card glass-card text-center hover-lift">
+                    <div class="platform-icon mb-3">
+                        <i class="fab fa-github" style="color: var(--github-color); font-size: 3rem;"></i>
+                    </div>
+                    <h5>GitHub</h5>
+                    <p class="text-secondary">Analyze your repository contributions and activity</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Testimonials Section -->
+<section class="testimonials-section py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="section-title">What Our Users Say</h2>
+            <p class="section-subtitle text-secondary">
+                Join thousands of satisfied learners
+            </p>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <div class="testimonial-card glass-card">
+                    <div class="testimonial-content">
+                        <div class="quote-icon mb-3">
+                            <i class="fas fa-quote-left text-gradient"></i>
+                        </div>
+                        <p class="testimonial-text">
+                            "CodeTrack Pro's AI tutor helped me understand complex algorithms in ways I never thought possible. The personalized approach made all the difference."
+                        </p>
+                        <div class="testimonial-author">
+                            <img src="{{ url_for('static', filename='images/testimonial-1.jpg') }}" 
+                                 alt="Sarah Chen" class="author-avatar">
+                            <div class="author-info">
+                                <h6 class="author-name">Sarah Chen</h6>
+                                <p class="author-title text-secondary">Software Engineer at Google</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4 mb-4">
+                <div class="testimonial-card glass-card">
+                    <div class="testimonial-content">
+                        <div class="quote-icon mb-3">
+                            <i class="fas fa-quote-left text-gradient"></i>
+                        </div>
+                        <p class="testimonial-text">
+                            "The contest system is incredible! Real-time execution and leaderboards make coding competitions feel like a game. I've improved so much."
+                        </p>
+                        <div class="testimonial-author">
+                            <img src="{{ url_for('static', filename='images/testimonial-2.jpg') }}" 
+                                 alt="Alex Rodriguez" class="author-avatar">
+                            <div class="author-info">
+                                <h6 class="author-name">Alex Rodriguez</h6>
+                                <p class="author-title text-secondary">Full-Stack Developer</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4 mb-4">
+                <div class="testimonial-card glass-card">
+                    <div class="testimonial-content">
+                        <div class="quote-icon mb-3">
+                            <i class="fas fa-quote-left text-gradient"></i>
+                        </div>
+                        <p class="testimonial-text">
+                            "The spaced repetition system is genius. I finally understand concepts I struggled with for months. The AI-generated flashcards are perfect."
+                        </p>
+                        <div class="testimonial-author">
+                            <img src="{{ url_for('static', filename='images/testimonial-3.jpg') }}" 
+                                 alt="Priya Patel" class="author-avatar">
+                            <div class="author-info">
+                                <h6 class="author-name">Priya Patel</h6>
+                                <p class="author-title text-secondary">Computer Science Student</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta-section py-5">
+    <div class="container">
+        <div class="cta-card glass text-center">
+            <h2 class="cta-title mb-3">Ready to Level Up Your Coding Skills?</h2>
+            <p class="cta-subtitle text-secondary mb-4">
+                Join thousands of developers who are already using CodeTrack Pro to advance their careers
+            </p>
+            <div class="cta-actions">
+                <a href="{{ url_for('auth.register') }}" class="btn btn-primary btn-lg me-3">
+                    <i class="fas fa-rocket"></i>
+                    Get Started Free
+                </a>
+                <a href="{{ url_for('auth.login') }}" class="btn btn-secondary btn-lg">
+                    <i class="fas fa-sign-in-alt"></i>
+                    Sign In
+                </a>
+            </div>
+            <p class="cta-note text-tertiary mt-3">
+                No credit card required • Free forever plan available
+            </p>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.hero-section {
+    padding: 4rem 0;
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+}
+
+.hero-title {
+    font-size: 3.5rem;
+    font-weight: 800;
+    line-height: 1.1;
+}
+
+.hero-subtitle {
+    font-size: 1.25rem;
+    line-height: 1.6;
+}
+
+.hero-stats .stat-item {
+    text-align: center;
+}
+
+.hero-stats .stat-number {
+    font-size: 2rem;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.hero-stats .stat-label {
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+}
+
+.code-preview {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-primary);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+}
+
+.code-preview-header {
+    background: var(--bg-glass);
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border-primary);
+}
+
+.code-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+}
+
+.code-preview-body {
+    padding: 1.5rem;
+}
+
+.code-snippet {
+    margin: 0;
+    font-family: 'Fira Code', monospace;
+    font-size: 0.875rem;
+    line-height: 1.6;
+}
+
+.keyword { color: #ff79c6; }
+.function { color: #50fa7b; }
+.comment { color: #6272a4; }
+.variable { color: #8be9fd; }
+.string { color: #f1fa8c; }
+.number { color: #bd93f9; }
+.operator { color: #ff79c6; }
+
+.section-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.section-subtitle {
+    font-size: 1.125rem;
+}
+
+.feature-card {
+    height: 100%;
+    padding: 2rem;
+}
+
+.feature-icon {
+    font-size: 3rem;
+}
+
+.feature-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.feature-description {
+    margin-bottom: 1.5rem;
+}
+
+.feature-list {
+    list-style: none;
+    padding: 0;
+}
+
+.feature-list li {
+    padding: 0.25rem 0;
+    color: var(--text-secondary);
+    position: relative;
+    padding-left: 1.5rem;
+}
+
+.feature-list li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    color: var(--success-color);
+    font-weight: 600;
+}
+
+.platform-card {
+    height: 100%;
+    padding: 2rem 1rem;
+}
+
+.platform-icon {
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.testimonial-card {
+    height: 100%;
+    padding: 2rem;
+}
+
+.testimonial-content {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.quote-icon {
+    font-size: 2rem;
+}
+
+.testimonial-text {
+    font-style: italic;
+    margin-bottom: 1.5rem;
+    flex-grow: 1;
+}
+
+.testimonial-author {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.author-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.author-name {
+    margin-bottom: 0.25rem;
+}
+
+.author-title {
+    font-size: 0.875rem;
+}
+
+.cta-card {
+    padding: 3rem 2rem;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.cta-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+}
+
+.cta-subtitle {
+    font-size: 1.125rem;
+}
+
+@media (max-width: 768px) {
+    .hero-title {
+        font-size: 2.5rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 1rem;
+    }
+    
+    .section-title {
+        font-size: 2rem;
+    }
+    
+    .cta-title {
+        font-size: 2rem;
+    }
+    
+    .hero-stats {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .hero-actions {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .hero-actions .btn {
+        width: 100%;
+    }
+}
+</style>
+{% endblock %}

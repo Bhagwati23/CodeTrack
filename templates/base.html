@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}CodeTrack Pro - Advanced Coding Learning Platform{% endblock %}</title>
+    
+    <!-- Meta Tags -->
+    <meta name="description" content="CodeTrack Pro - Comprehensive coding learning platform with AI tutoring, contests, and collaborative study groups">
+    <meta name="keywords" content="coding, programming, learning, AI tutor, contests, study groups, competitive programming">
+    <meta name="author" content="CodeTrack Pro Team">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ request.url }}">
+    <meta property="og:title" content="{% block og_title %}CodeTrack Pro{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}Advanced coding learning platform{% endblock %}">
+    <meta property="og:image" content="{{ url_for('static', filename='images/og-image.png') }}">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="{{ request.url }}">
+    <meta property="twitter:title" content="{% block twitter_title %}CodeTrack Pro{% endblock %}">
+    <meta property="twitter:description" content="{% block twitter_description %}Advanced coding learning platform{% endblock %}">
+    <meta property="twitter:image" content="{{ url_for('static', filename='images/twitter-image.png') }}">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='images/apple-touch-icon.png') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='images/favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='images/favicon-16x16.png') }}">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Custom CSS -->
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="container">
+            <div class="d-flex justify-between items-center">
+                <!-- Brand -->
+                <a href="{{ url_for('main.index') }}" class="navbar-brand">
+                    <i class="fas fa-code"></i>
+                    CodeTrack Pro
+                </a>
+                
+                <!-- Navigation Links -->
+                {% if current_user.is_authenticated %}
+                <div class="navbar-nav d-none d-md-flex">
+                    <a href="{{ url_for('dashboard.dashboard') }}" class="nav-link {% if request.endpoint == 'dashboard.dashboard' %}active{% endif %}">
+                        <i class="fas fa-home"></i>
+                        Dashboard
+                    </a>
+                    <a href="{{ url_for('dashboard.coding') }}" class="nav-link {% if request.endpoint == 'dashboard.coding' %}active{% endif %}">
+                        <i class="fas fa-chart-line"></i>
+                        Coding
+                    </a>
+                    <a href="{{ url_for('ai.ai_tutor') }}" class="nav-link {% if request.endpoint == 'ai.ai_tutor' %}active{% endif %}">
+                        <i class="fas fa-robot"></i>
+                        AI Tutor
+                    </a>
+                    <a href="{{ url_for('contest.contests') }}" class="nav-link {% if request.endpoint == 'contest.contests' %}active{% endif %}">
+                        <i class="fas fa-trophy"></i>
+                        Contests
+                    </a>
+                    <a href="{{ url_for('forum.doubts') }}" class="nav-link {% if request.endpoint == 'forum.doubts' %}active{% endif %}">
+                        <i class="fas fa-question-circle"></i>
+                        Forum
+                    </a>
+                    <a href="{{ url_for('study.study_groups') }}" class="nav-link {% if request.endpoint == 'study.study_groups' %}active{% endif %}">
+                        <i class="fas fa-users"></i>
+                        Study Groups
+                    </a>
+                    <a href="{{ url_for('study.revision') }}" class="nav-link {% if request.endpoint == 'study.revision' %}active{% endif %}">
+                        <i class="fas fa-brain"></i>
+                        Revision
+                    </a>
+                </div>
+                
+                <!-- User Menu -->
+                <div class="d-flex items-center gap-3">
+                    <!-- Notifications -->
+                    <div class="dropdown">
+                        <button class="btn btn-secondary position-relative" onclick="toggleDropdown('notificationDropdown')">
+                            <i class="fas fa-bell"></i>
+                            {% if unread_notifications > 0 %}
+                            <span class="badge badge-danger position-absolute" style="top: -8px; right: -8px; font-size: 10px; min-width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                                {{ unread_notifications }}
+                            </span>
+                            {% endif %}
+                        </button>
+                        <div class="dropdown-menu" id="notificationDropdown">
+                            <div class="notification-dropdown">
+                                <div class="p-3 border-bottom">
+                                    <h6 class="mb-0">Notifications</h6>
+                                </div>
+                                <div id="notification-list">
+                                    <div class="text-center p-3">
+                                        <div class="loading"></div>
+                                        <p class="text-secondary mt-2">Loading notifications...</p>
+                                    </div>
+                                </div>
+                                <div class="p-2 border-top">
+                                    <a href="{{ url_for('dashboard.notifications') }}" class="btn btn-sm btn-primary w-full">
+                                        View All Notifications
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Theme Toggle -->
+                    <button class="btn btn-secondary" onclick="toggleTheme()" title="Toggle theme">
+                        <i class="fas fa-moon" id="theme-icon"></i>
+                    </button>
+                    
+                    <!-- User Dropdown -->
+                    <div class="dropdown">
+                        <button class="btn btn-secondary d-flex items-center gap-2" onclick="toggleDropdown('userDropdown')">
+                            <img src="{{ url_for('static', filename='images/default-avatar.png') }}" 
+                                 alt="Avatar" class="rounded-full" width="32" height="32">
+                            <span class="d-none d-sm-inline">{{ current_user.username }}</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="dropdown-menu" id="userDropdown">
+                            <a href="{{ url_for('dashboard.profile') }}" class="dropdown-item">
+                                <i class="fas fa-user"></i>
+                                Profile
+                            </a>
+                            <a href="{{ url_for('dashboard.notifications') }}" class="dropdown-item">
+                                <i class="fas fa-bell"></i>
+                                Notifications
+                            </a>
+                            {% if current_user.role == 'admin' %}
+                            <a href="{{ url_for('admin.admin_dashboard') }}" class="dropdown-item">
+                                <i class="fas fa-cog"></i>
+                                Admin Panel
+                            </a>
+                            {% endif %}
+                            <hr class="dropdown-divider">
+                            <a href="{{ url_for('auth.logout') }}" class="dropdown-item">
+                                <i class="fas fa-sign-out-alt"></i>
+                                Logout
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <!-- Mobile Menu Toggle -->
+                    <button class="btn btn-secondary d-md-none" onclick="toggleMobileMenu()">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+                
+                {% else %}
+                <!-- Guest Navigation -->
+                <div class="navbar-nav">
+                    <a href="{{ url_for('auth.login') }}" class="btn btn-secondary">
+                        <i class="fas fa-sign-in-alt"></i>
+                        Login
+                    </a>
+                    <a href="{{ url_for('auth.register') }}" class="btn btn-primary">
+                        <i class="fas fa-user-plus"></i>
+                        Register
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div class="d-md-none" id="mobileMenu" style="display: none;">
+            <div class="container">
+                <div class="py-3">
+                    {% if current_user.is_authenticated %}
+                    <a href="{{ url_for('dashboard.dashboard') }}" class="nav-link d-block mb-2">
+                        <i class="fas fa-home"></i>
+                        Dashboard
+                    </a>
+                    <a href="{{ url_for('dashboard.coding') }}" class="nav-link d-block mb-2">
+                        <i class="fas fa-chart-line"></i>
+                        Coding
+                    </a>
+                    <a href="{{ url_for('ai.ai_tutor') }}" class="nav-link d-block mb-2">
+                        <i class="fas fa-robot"></i>
+                        AI Tutor
+                    </a>
+                    <a href="{{ url_for('contest.contests') }}" class="nav-link d-block mb-2">
+                        <i class="fas fa-trophy"></i>
+                        Contests
+                    </a>
+                    <a href="{{ url_for('forum.doubts') }}" class="nav-link d-block mb-2">
+                        <i class="fas fa-question-circle"></i>
+                        Forum
+                    </a>
+                    <a href="{{ url_for('study.study_groups') }}" class="nav-link d-block mb-2">
+                        <i class="fas fa-users"></i>
+                        Study Groups
+                    </a>
+                    <a href="{{ url_for('study.revision') }}" class="nav-link d-block mb-2">
+                        <i class="fas fa-brain"></i>
+                        Revision
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Main Content -->
+    <main style="margin-top: 80px;">
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="container mt-3">
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }} animate-fadeIn">
+                            <div class="d-flex items-center justify-between">
+                                <span>{{ message }}</span>
+                                <button class="btn btn-sm btn-secondary" onclick="this.parentElement.parentElement.remove()">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+        
+        <!-- Page Content -->
+        {% block content %}{% endblock %}
+    </main>
+    
+    <!-- Footer -->
+    <footer class="mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h5 class="text-gradient mb-3">
+                        <i class="fas fa-code"></i>
+                        CodeTrack Pro
+                    </h5>
+                    <p class="text-secondary">
+                        The ultimate coding learning platform with AI tutoring, contests, and collaborative study groups.
+                    </p>
+                </div>
+                <div class="col-md-2">
+                    <h6 class="mb-3">Platform</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="{{ url_for('dashboard.dashboard') }}" class="text-secondary">Dashboard</a></li>
+                        <li><a href="{{ url_for('ai.ai_tutor') }}" class="text-secondary">AI Tutor</a></li>
+                        <li><a href="{{ url_for('contest.contests') }}" class="text-secondary">Contests</a></li>
+                        <li><a href="{{ url_for('forum.doubts') }}" class="text-secondary">Forum</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-2">
+                    <h6 class="mb-3">Learning</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="{{ url_for('study.revision') }}" class="text-secondary">Flashcards</a></li>
+                        <li><a href="{{ url_for('study.study_groups') }}" class="text-secondary">Study Groups</a></li>
+                        <li><a href="{{ url_for('dashboard.coding') }}" class="text-secondary">Progress</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-2">
+                    <h6 class="mb-3">Support</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="{{ url_for('main.about') }}" class="text-secondary">About</a></li>
+                        <li><a href="#" class="text-secondary">Help Center</a></li>
+                        <li><a href="#" class="text-secondary">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-2">
+                    <h6 class="mb-3">Connect</h6>
+                    <div class="d-flex gap-2">
+                        <a href="#" class="btn btn-secondary btn-sm">
+                            <i class="fab fa-github"></i>
+                        </a>
+                        <a href="#" class="btn btn-secondary btn-sm">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="btn btn-secondary btn-sm">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <hr class="border-primary my-4">
+            <div class="d-flex justify-between items-center">
+                <p class="text-secondary mb-0">
+                    &copy; 2024 CodeTrack Pro. All rights reserved.
+                </p>
+                <div class="d-flex gap-3">
+                    <a href="#" class="text-secondary">Privacy Policy</a>
+                    <a href="#" class="text-secondary">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- JavaScript -->
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    
+    <!-- Custom JavaScript -->
+    {% block extra_js %}{% endblock %}
+    
+    <script>
+        // Theme Toggle
+        function toggleTheme() {
+            const html = document.documentElement;
+            const theme = html.getAttribute('data-theme');
+            const newTheme = theme === 'dark' ? 'light' : 'dark';
+            
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            
+            const icon = document.getElementById('theme-icon');
+            icon.className = newTheme === 'dark' ? 'fas fa-moon' : 'fas fa-sun';
+        }
+        
+        // Load saved theme
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            
+            const icon = document.getElementById('theme-icon');
+            icon.className = savedTheme === 'dark' ? 'fas fa-moon' : 'fas fa-sun';
+            
+            // Load notifications
+            loadNotifications();
+        });
+        
+        // Dropdown Toggle
+        function toggleDropdown(dropdownId) {
+            const dropdown = document.getElementById(dropdownId);
+            const isVisible = dropdown.classList.contains('show');
+            
+            // Close all dropdowns
+            document.querySelectorAll('.dropdown-menu').forEach(menu => {
+                menu.classList.remove('show');
+            });
+            
+            // Toggle current dropdown
+            if (!isVisible) {
+                dropdown.classList.add('show');
+            }
+        }
+        
+        // Mobile Menu Toggle
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+        }
+        
+        // Close dropdowns when clicking outside
+        document.addEventListener('click', function(event) {
+            if (!event.target.closest('.dropdown')) {
+                document.querySelectorAll('.dropdown-menu').forEach(menu => {
+                    menu.classList.remove('show');
+                });
+            }
+        });
+        
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+        
+        // Load notifications
+        function loadNotifications() {
+            const notificationList = document.getElementById('notification-list');
+            if (!notificationList) return;
+            
+            fetch('/dashboard/notifications')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.notifications && data.notifications.length > 0) {
+                        notificationList.innerHTML = data.notifications.map(notification => `
+                            <div class="notification-item">
+                                <div class="d-flex justify-between items-start">
+                                    <div class="flex-1">
+                                        <h6 class="mb-1">${notification.title}</h6>
+                                        <p class="text-secondary mb-0">${notification.message}</p>
+                                        <small class="text-tertiary">${new Date(notification.created_at).toLocaleString()}</small>
+                                    </div>
+                                    ${!notification.is_read ? '<div class="badge badge-primary badge-sm">New</div>' : ''}
+                                </div>
+                            </div>
+                        `).join('');
+                    } else {
+                        notificationList.innerHTML = '<div class="text-center p-3"><p class="text-secondary mb-0">No notifications</p></div>';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading notifications:', error);
+                    notificationList.innerHTML = '<div class="text-center p-3"><p class="text-error mb-0">Error loading notifications</p></div>';
+                });
+        }
+        
+        // Auto-hide flash messages
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(function() {
+                document.querySelectorAll('.alert').forEach(alert => {
+                    alert.style.opacity = '0';
+                    setTimeout(() => alert.remove(), 300);
+                });
+            }, 5000);
+        });
+    </script>
+</body>
+</html>

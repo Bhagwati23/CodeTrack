@@ -1,0 +1,694 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - CodeTrack Pro{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+    <div class="container">
+        <!-- Welcome Section -->
+        <div class="welcome-section mb-4">
+            <div class="welcome-content">
+                <h1 class="welcome-title">
+                    Welcome back, <span class="text-gradient">{{ current_user.first_name or current_user.username }}!</span>
+                </h1>
+                <p class="welcome-subtitle text-secondary">
+                    Ready to continue your coding journey? Let's make today productive!
+                </p>
+            </div>
+            <div class="welcome-actions">
+                <a href="{{ url_for('ai.ai_tutor') }}" class="btn btn-primary">
+                    <i class="fas fa-robot"></i>
+                    Start AI Session
+                </a>
+                <a href="{{ url_for('study.revision') }}" class="btn btn-secondary">
+                    <i class="fas fa-brain"></i>
+                    Review Flashcards
+                </a>
+            </div>
+        </div>
+        
+        <!-- Quick Stats -->
+        <div class="stats-grid mb-4">
+            <div class="stat-card glass hover-lift">
+                <div class="stat-icon">
+                    <i class="fas fa-code text-gradient"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-value">{{ user_stats.total_problems or 0 }}</div>
+                    <div class="stat-label">Problems Solved</div>
+                </div>
+            </div>
+            
+            <div class="stat-card glass hover-lift">
+                <div class="stat-icon">
+                    <i class="fas fa-fire text-gradient"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-value">{{ user_stats.streak or 0 }}</div>
+                    <div class="stat-label">Day Streak</div>
+                </div>
+            </div>
+            
+            <div class="stat-card glass hover-lift">
+                <div class="stat-icon">
+                    <i class="fas fa-clock text-gradient"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-value">{{ user_stats.total_study_sessions or 0 }}</div>
+                    <div class="stat-label">Study Sessions</div>
+                </div>
+            </div>
+            
+            <div class="stat-card glass hover-lift">
+                <div class="stat-icon">
+                    <i class="fas fa-brain text-gradient"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-value">{{ due_flashcards or 0 }}</div>
+                    <div class="stat-label">Cards Due</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <!-- Main Content -->
+            <div class="col-md-8">
+                <!-- Recent Activity -->
+                <div class="activity-section mb-4">
+                    <div class="section-header">
+                        <h3 class="section-title">
+                            <i class="fas fa-history text-gradient"></i>
+                            Recent Activity
+                        </h3>
+                        <a href="{{ url_for('dashboard.coding') }}" class="btn btn-sm btn-secondary">
+                            View All
+                        </a>
+                    </div>
+                    
+                    <div class="activity-list">
+                        {% if recent_activity %}
+                            {% for activity in recent_activity %}
+                            <div class="activity-item glass">
+                                <div class="activity-icon">
+                                    {% if activity.type == 'problem_solved' %}
+                                        <i class="fas fa-check-circle text-success"></i>
+                                    {% elif activity.type == 'study_session' %}
+                                        <i class="fas fa-book text-info"></i>
+                                    {% else %}
+                                        <i class="fas fa-circle text-secondary"></i>
+                                    {% endif %}
+                                </div>
+                                <div class="activity-content">
+                                    <h6 class="activity-title">{{ activity.title }}</h6>
+                                    <p class="activity-description text-secondary">
+                                        {% if activity.type == 'problem_solved' %}
+                                            Solved on {{ activity.platform }}
+                                        {% elif activity.type == 'study_session' %}
+                                            Duration: {{ activity.duration }} minutes
+                                        {% endif %}
+                                    </p>
+                                    <small class="activity-time text-tertiary">
+                                        {{ activity.time.strftime('%B %d, %Y at %I:%M %p') }}
+                                    </small>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        {% else %}
+                            <div class="empty-state">
+                                <div class="empty-icon">
+                                    <i class="fas fa-inbox text-secondary"></i>
+                                </div>
+                                <h6 class="empty-title">No recent activity</h6>
+                                <p class="empty-description text-secondary">
+                                    Start solving problems or join a study session to see your activity here.
+                                </p>
+                                <a href="{{ url_for('ai.ai_tutor') }}" class="btn btn-primary">
+                                    Start Learning
+                                </a>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <!-- Learning Progress -->
+                <div class="progress-section mb-4">
+                    <div class="section-header">
+                        <h3 class="section-title">
+                            <i class="fas fa-chart-line text-gradient"></i>
+                            Learning Progress
+                        </h3>
+                        <a href="{{ url_for('dashboard.coding') }}" class="btn btn-sm btn-secondary">
+                            View Details
+                        </a>
+                    </div>
+                    
+                    <div class="progress-chart glass">
+                        <canvas id="progressChart" width="400" height="200"></canvas>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Sidebar -->
+            <div class="col-md-4">
+                <!-- Upcoming Contests -->
+                <div class="contests-section mb-4">
+                    <div class="section-header">
+                        <h3 class="section-title">
+                            <i class="fas fa-trophy text-gradient"></i>
+                            Upcoming Contests
+                        </h3>
+                        <a href="{{ url_for('contest.contests') }}" class="btn btn-sm btn-secondary">
+                            View All
+                        </a>
+                    </div>
+                    
+                    <div class="contests-list">
+                        {% if upcoming_contests %}
+                            {% for contest in upcoming_contests %}
+                            <div class="contest-item glass">
+                                <div class="contest-header">
+                                    <h6 class="contest-title">{{ contest.title }}</h6>
+                                    <div class="contest-badge badge badge-primary">
+                                        {{ contest.duration_minutes }}min
+                                    </div>
+                                </div>
+                                <p class="contest-description text-secondary">
+                                    {{ contest.description[:100] }}{% if contest.description|length > 100 %}...{% endif %}
+                                </p>
+                                <div class="contest-meta">
+                                    <div class="contest-time">
+                                        <i class="fas fa-clock text-secondary"></i>
+                                        <span class="text-secondary">
+                                            {{ contest.start_date.strftime('%B %d, %Y at %I:%M %p') }}
+                                        </span>
+                                    </div>
+                                    <div class="contest-actions">
+                                        <a href="{{ url_for('contest.participate_contest', contest_id=contest.id) }}" 
+                                           class="btn btn-sm btn-primary">
+                                            Join
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        {% else %}
+                            <div class="empty-state">
+                                <div class="empty-icon">
+                                    <i class="fas fa-calendar text-secondary"></i>
+                                </div>
+                                <h6 class="empty-title">No upcoming contests</h6>
+                                <p class="empty-description text-secondary">
+                                    Check back later for new coding competitions.
+                                </p>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <!-- Quick Actions -->
+                <div class="quick-actions-section mb-4">
+                    <div class="section-header">
+                        <h3 class="section-title">
+                            <i class="fas fa-bolt text-gradient"></i>
+                            Quick Actions
+                        </h3>
+                    </div>
+                    
+                    <div class="quick-actions-grid">
+                        <a href="{{ url_for('ai.ai_tutor') }}" class="quick-action glass hover-lift">
+                            <div class="quick-action-icon">
+                                <i class="fas fa-robot"></i>
+                            </div>
+                            <div class="quick-action-content">
+                                <h6>AI Tutor</h6>
+                                <p class="text-secondary">Get help with coding</p>
+                            </div>
+                        </a>
+                        
+                        <a href="{{ url_for('study.revision') }}" class="quick-action glass hover-lift">
+                            <div class="quick-action-icon">
+                                <i class="fas fa-brain"></i>
+                            </div>
+                            <div class="quick-action-content">
+                                <h6>Flashcards</h6>
+                                <p class="text-secondary">Review concepts</p>
+                            </div>
+                        </a>
+                        
+                        <a href="{{ url_for('forum.doubts') }}" class="quick-action glass hover-lift">
+                            <div class="quick-action-icon">
+                                <i class="fas fa-question-circle"></i>
+                            </div>
+                            <div class="quick-action-content">
+                                <h6>Ask Question</h6>
+                                <p class="text-secondary">Get help from community</p>
+                            </div>
+                        </a>
+                        
+                        <a href="{{ url_for('study.study_groups') }}" class="quick-action glass hover-lift">
+                            <div class="quick-action-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div class="quick-action-content">
+                                <h6>Study Groups</h6>
+                                <p class="text-secondary">Join or create group</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Study Goals -->
+                <div class="goals-section mb-4">
+                    <div class="section-header">
+                        <h3 class="section-title">
+                            <i class="fas fa-target text-gradient"></i>
+                            Today's Goals
+                        </h3>
+                    </div>
+                    
+                    <div class="goals-list glass">
+                        <div class="goal-item">
+                            <div class="goal-content">
+                                <h6>Solve 3 Problems</h6>
+                                <div class="goal-progress">
+                                    <div class="progress">
+                                        <div class="progress-bar" style="width: 33%"></div>
+                                    </div>
+                                    <span class="progress-text">1/3 completed</span>
+                                </div>
+                            </div>
+                            <div class="goal-status">
+                                <i class="fas fa-circle text-warning"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="goal-item">
+                            <div class="goal-content">
+                                <h6>Review 10 Flashcards</h6>
+                                <div class="goal-progress">
+                                    <div class="progress">
+                                        <div class="progress-bar" style="width: 70%"></div>
+                                    </div>
+                                    <span class="progress-text">7/10 completed</span>
+                                </div>
+                            </div>
+                            <div class="goal-status">
+                                <i class="fas fa-circle text-info"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="goal-item">
+                            <div class="goal-content">
+                                <h6>Study for 2 Hours</h6>
+                                <div class="goal-progress">
+                                    <div class="progress">
+                                        <div class="progress-bar" style="width: 85%"></div>
+                                    </div>
+                                    <span class="progress-text">1h 42m completed</span>
+                                </div>
+                            </div>
+                            <div class="goal-status">
+                                <i class="fas fa-circle text-success"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.dashboard-container {
+    padding: 2rem 0;
+}
+
+.welcome-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2rem;
+    background: var(--bg-glass);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--border-primary);
+    border-radius: var(--radius-xl);
+    margin-bottom: 2rem;
+}
+
+.welcome-title {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.welcome-subtitle {
+    font-size: 1rem;
+    margin-bottom: 0;
+}
+
+.welcome-actions {
+    display: flex;
+    gap: 1rem;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.stat-card {
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.stat-icon {
+    font-size: 2.5rem;
+}
+
+.stat-content {
+    flex-grow: 1;
+}
+
+.stat-value {
+    font-size: 2rem;
+    font-weight: 700;
+    background: var(--text-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1;
+    margin-bottom: 0.25rem;
+}
+
+.stat-label {
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.section-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.activity-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.activity-item {
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.activity-icon {
+    font-size: 1.5rem;
+    width: 40px;
+    text-align: center;
+}
+
+.activity-content {
+    flex-grow: 1;
+}
+
+.activity-title {
+    margin-bottom: 0.25rem;
+    font-weight: 600;
+}
+
+.activity-description {
+    margin-bottom: 0.25rem;
+    font-size: 0.875rem;
+}
+
+.activity-time {
+    font-size: 0.75rem;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 3rem 2rem;
+}
+
+.empty-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.empty-title {
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+.empty-description {
+    margin-bottom: 1.5rem;
+}
+
+.progress-chart {
+    padding: 1.5rem;
+}
+
+.contests-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.contest-item {
+    padding: 1.5rem;
+}
+
+.contest-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 0.75rem;
+}
+
+.contest-title {
+    margin: 0;
+    font-weight: 600;
+    flex-grow: 1;
+}
+
+.contest-description {
+    margin-bottom: 1rem;
+    font-size: 0.875rem;
+    line-height: 1.5;
+}
+
+.contest-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.contest-time {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+}
+
+.quick-actions-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+}
+
+.quick-action {
+    padding: 1.5rem;
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    transition: var(--transition-normal);
+}
+
+.quick-action:hover {
+    color: inherit;
+    transform: translateY(-2px);
+}
+
+.quick-action-icon {
+    font-size: 2rem;
+    margin-bottom: 0.75rem;
+    color: var(--text-accent);
+}
+
+.quick-action-content h6 {
+    margin-bottom: 0.25rem;
+    font-weight: 600;
+}
+
+.quick-action-content p {
+    margin: 0;
+    font-size: 0.875rem;
+}
+
+.goals-list {
+    padding: 1.5rem;
+}
+
+.goal-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--border-primary);
+}
+
+.goal-item:last-child {
+    border-bottom: none;
+}
+
+.goal-content {
+    flex-grow: 1;
+}
+
+.goal-content h6 {
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+.goal-progress {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.goal-progress .progress {
+    flex-grow: 1;
+    height: 6px;
+}
+
+.progress-text {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    white-space: nowrap;
+}
+
+.goal-status {
+    font-size: 0.75rem;
+}
+
+@media (max-width: 768px) {
+    .welcome-section {
+        flex-direction: column;
+        gap: 1.5rem;
+        text-align: center;
+    }
+    
+    .welcome-actions {
+        flex-direction: column;
+        width: 100%;
+    }
+    
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .quick-actions-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .section-header {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: stretch;
+    }
+}
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Initialize progress chart
+document.addEventListener('DOMContentLoaded', function() {
+    const ctx = document.getElementById('progressChart');
+    if (ctx) {
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                datasets: [{
+                    label: 'Problems Solved',
+                    data: [2, 4, 3, 6, 5, 7, 4],
+                    borderColor: 'rgb(102, 126, 234)',
+                    backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                    tension: 0.4,
+                    fill: true
+                }, {
+                    label: 'Study Hours',
+                    data: [1.5, 2, 1.8, 2.5, 2.2, 3, 2.8],
+                    borderColor: 'rgb(118, 75, 162)',
+                    backgroundColor: 'rgba(118, 75, 162, 0.1)',
+                    tension: 0.4,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        labels: {
+                            color: '#ffffff',
+                            usePointStyle: true
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        ticks: {
+                            color: '#b3b3b3'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
+                    },
+                    y: {
+                        ticks: {
+                            color: '#b3b3b3'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
+                    }
+                }
+            }
+        });
+    }
+    
+    // Auto-refresh activity every 30 seconds
+    setInterval(function() {
+        // This would typically make an AJAX request to refresh activity data
+        console.log('Refreshing activity data...');
+    }, 30000);
+});
+</script>
+{% endblock %}

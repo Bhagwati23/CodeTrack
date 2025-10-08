@@ -1,0 +1,392 @@
+{% extends "base.html" %}
+
+{% block title %}Login - CodeTrack Pro{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="container">
+        <div class="row justify-center items-center" style="min-height: 80vh;">
+            <div class="col-md-6 col-lg-5">
+                <div class="auth-card glass">
+                    <div class="auth-header text-center mb-4">
+                        <div class="auth-logo mb-3">
+                            <i class="fas fa-code text-gradient" style="font-size: 3rem;"></i>
+                        </div>
+                        <h1 class="auth-title">Welcome Back</h1>
+                        <p class="auth-subtitle text-secondary">
+                            Sign in to continue your coding journey
+                        </p>
+                    </div>
+                    
+                    <form method="POST" class="auth-form">
+                        <div class="form-group">
+                            <label for="username" class="form-label">
+                                <i class="fas fa-user"></i>
+                                Username
+                            </label>
+                            <input type="text" 
+                                   class="form-control" 
+                                   id="username" 
+                                   name="username" 
+                                   placeholder="Enter your username"
+                                   required
+                                   autocomplete="username">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="password" class="form-label">
+                                <i class="fas fa-lock"></i>
+                                Password
+                            </label>
+                            <div class="password-input-group">
+                                <input type="password" 
+                                       class="form-control" 
+                                       id="password" 
+                                       name="password" 
+                                       placeholder="Enter your password"
+                                       required
+                                       autocomplete="current-password">
+                                <button type="button" 
+                                        class="password-toggle" 
+                                        onclick="togglePassword()">
+                                    <i class="fas fa-eye" id="password-icon"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <div class="form-check">
+                                <input type="checkbox" 
+                                       class="form-check-input" 
+                                       id="remember" 
+                                       name="remember">
+                                <label for="remember" class="form-check-label">
+                                    Remember me
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary btn-lg w-full mb-3">
+                            <i class="fas fa-sign-in-alt"></i>
+                            Sign In
+                        </button>
+                        
+                        <div class="auth-divider">
+                            <span class="divider-text">or</span>
+                        </div>
+                        
+                        <div class="social-login">
+                            <button type="button" class="btn btn-secondary w-full mb-2">
+                                <i class="fab fa-google"></i>
+                                Continue with Google
+                            </button>
+                            <button type="button" class="btn btn-secondary w-full mb-2">
+                                <i class="fab fa-github"></i>
+                                Continue with GitHub
+                            </button>
+                        </div>
+                        
+                        <div class="auth-links text-center mt-4">
+                            <p class="text-secondary">
+                                Don't have an account? 
+                                <a href="{{ url_for('auth.register') }}" class="text-gradient">
+                                    Sign up for free
+                                </a>
+                            </p>
+                            <p class="text-secondary">
+                                <a href="#" class="text-secondary">
+                                    Forgot your password?
+                                </a>
+                            </p>
+                        </div>
+                    </form>
+                </div>
+                
+                <!-- Demo Account Info -->
+                <div class="demo-info glass mt-4">
+                    <div class="demo-header">
+                        <i class="fas fa-info-circle text-info"></i>
+                        <h6 class="demo-title">Demo Account</h6>
+                    </div>
+                    <p class="demo-text text-secondary">
+                        Try CodeTrack Pro with our demo account:
+                    </p>
+                    <div class="demo-credentials">
+                        <div class="credential-item">
+                            <span class="credential-label">Username:</span>
+                            <span class="credential-value">demo</span>
+                            <button class="btn btn-sm btn-secondary" onclick="copyToClipboard('demo')">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                        </div>
+                        <div class="credential-item">
+                            <span class="credential-label">Password:</span>
+                            <span class="credential-value">demo123</span>
+                            <button class="btn btn-sm btn-secondary" onclick="copyToClipboard('demo123')">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.auth-container {
+    padding: 2rem 0;
+}
+
+.auth-card {
+    padding: 3rem 2rem;
+    border-radius: var(--radius-2xl);
+}
+
+.auth-header {
+    margin-bottom: 2rem;
+}
+
+.auth-title {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.auth-subtitle {
+    font-size: 1rem;
+}
+
+.auth-form {
+    margin-bottom: 1rem;
+}
+
+.password-input-group {
+    position: relative;
+}
+
+.password-toggle {
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: var(--radius-sm);
+    transition: var(--transition-fast);
+}
+
+.password-toggle:hover {
+    color: var(--text-primary);
+    background: var(--bg-glass-hover);
+}
+
+.auth-divider {
+    position: relative;
+    text-align: center;
+    margin: 1.5rem 0;
+}
+
+.auth-divider::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: var(--border-primary);
+}
+
+.divider-text {
+    background: var(--bg-primary);
+    padding: 0 1rem;
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+}
+
+.social-login .btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.auth-links a {
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.auth-links a:hover {
+    text-decoration: underline;
+}
+
+.demo-info {
+    padding: 1.5rem;
+    border-radius: var(--radius-xl);
+}
+
+.demo-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.demo-title {
+    margin: 0;
+    font-weight: 600;
+}
+
+.demo-text {
+    margin-bottom: 1rem;
+    font-size: 0.875rem;
+}
+
+.demo-credentials {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.credential-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem;
+    background: var(--bg-glass);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-primary);
+}
+
+.credential-label {
+    font-weight: 500;
+    min-width: 70px;
+}
+
+.credential-value {
+    font-family: 'Fira Code', monospace;
+    background: var(--bg-secondary);
+    padding: 0.25rem 0.5rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.875rem;
+    flex-grow: 1;
+}
+
+.credential-item .btn {
+    padding: 0.25rem 0.5rem;
+    min-width: auto;
+}
+
+.w-full {
+    width: 100%;
+}
+
+@media (max-width: 768px) {
+    .auth-card {
+        padding: 2rem 1.5rem;
+    }
+    
+    .auth-title {
+        font-size: 1.75rem;
+    }
+    
+    .demo-credentials {
+        gap: 0.5rem;
+    }
+    
+    .credential-item {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.5rem;
+    }
+    
+    .credential-label {
+        min-width: auto;
+    }
+}
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function togglePassword() {
+    const passwordInput = document.getElementById('password');
+    const passwordIcon = document.getElementById('password-icon');
+    
+    if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        passwordIcon.className = 'fas fa-eye-slash';
+    } else {
+        passwordInput.type = 'password';
+        passwordIcon.className = 'fas fa-eye';
+    }
+}
+
+function copyToClipboard(text) {
+    navigator.clipboard.writeText(text).then(function() {
+        // Show success feedback
+        const button = event.target.closest('button');
+        const originalIcon = button.innerHTML;
+        button.innerHTML = '<i class="fas fa-check"></i>';
+        button.classList.add('btn-success');
+        button.classList.remove('btn-secondary');
+        
+        setTimeout(() => {
+            button.innerHTML = originalIcon;
+            button.classList.remove('btn-success');
+            button.classList.add('btn-secondary');
+        }, 2000);
+    }).catch(function(err) {
+        console.error('Could not copy text: ', err);
+    });
+}
+
+// Auto-fill demo credentials when clicked
+document.addEventListener('DOMContentLoaded', function() {
+    const demoButtons = document.querySelectorAll('.credential-item');
+    
+    demoButtons.forEach((item, index) => {
+        item.addEventListener('click', function(e) {
+            if (e.target.closest('button')) return;
+            
+            const value = item.querySelector('.credential-value').textContent;
+            const input = index === 0 ? 
+                document.getElementById('username') : 
+                document.getElementById('password');
+            
+            input.value = value;
+            input.focus();
+        });
+    });
+});
+
+// Form validation
+document.querySelector('.auth-form').addEventListener('submit', function(e) {
+    const username = document.getElementById('username').value.trim();
+    const password = document.getElementById('password').value;
+    
+    if (!username || !password) {
+        e.preventDefault();
+        alert('Please fill in all fields');
+        return;
+    }
+    
+    if (username.length < 3) {
+        e.preventDefault();
+        alert('Username must be at least 3 characters long');
+        return;
+    }
+    
+    if (password.length < 6) {
+        e.preventDefault();
+        alert('Password must be at least 6 characters long');
+        return;
+    }
+});
+</script>
+{% endblock %}

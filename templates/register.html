@@ -1,0 +1,622 @@
+{% extends "base.html" %}
+
+{% block title %}Register - CodeTrack Pro{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="container">
+        <div class="row justify-center items-center" style="min-height: 80vh;">
+            <div class="col-md-8 col-lg-6">
+                <div class="auth-card glass">
+                    <div class="auth-header text-center mb-4">
+                        <div class="auth-logo mb-3">
+                            <i class="fas fa-rocket text-gradient" style="font-size: 3rem;"></i>
+                        </div>
+                        <h1 class="auth-title">Join CodeTrack Pro</h1>
+                        <p class="auth-subtitle text-secondary">
+                            Start your coding journey with AI-powered learning
+                        </p>
+                    </div>
+                    
+                    <form method="POST" class="auth-form" id="registerForm">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="first_name" class="form-label">
+                                        <i class="fas fa-user"></i>
+                                        First Name
+                                    </label>
+                                    <input type="text" 
+                                           class="form-control" 
+                                           id="first_name" 
+                                           name="first_name" 
+                                           placeholder="Enter your first name"
+                                           autocomplete="given-name">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="last_name" class="form-label">
+                                        <i class="fas fa-user"></i>
+                                        Last Name
+                                    </label>
+                                    <input type="text" 
+                                           class="form-control" 
+                                           id="last_name" 
+                                           name="last_name" 
+                                           placeholder="Enter your last name"
+                                           autocomplete="family-name">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="username" class="form-label">
+                                <i class="fas fa-at"></i>
+                                Username
+                            </label>
+                            <input type="text" 
+                                   class="form-control" 
+                                   id="username" 
+                                   name="username" 
+                                   placeholder="Choose a unique username"
+                                   required
+                                   autocomplete="username">
+                            <div class="form-help">
+                                <small class="text-secondary">
+                                    <i class="fas fa-info-circle"></i>
+                                    Username must be 3-20 characters, letters and numbers only
+                                </small>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="email" class="form-label">
+                                <i class="fas fa-envelope"></i>
+                                Email Address
+                            </label>
+                            <input type="email" 
+                                   class="form-control" 
+                                   id="email" 
+                                   name="email" 
+                                   placeholder="Enter your email address"
+                                   required
+                                   autocomplete="email">
+                            <div class="form-help">
+                                <small class="text-secondary">
+                                    <i class="fas fa-shield-alt"></i>
+                                    We'll never share your email with anyone
+                                </small>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="role" class="form-label">
+                                <i class="fas fa-graduation-cap"></i>
+                                I am a...
+                            </label>
+                            <select class="form-control form-select" id="role" name="role">
+                                <option value="student">Student</option>
+                                <option value="admin">Instructor/Admin</option>
+                            </select>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="password" class="form-label">
+                                        <i class="fas fa-lock"></i>
+                                        Password
+                                    </label>
+                                    <div class="password-input-group">
+                                        <input type="password" 
+                                               class="form-control" 
+                                               id="password" 
+                                               name="password" 
+                                               placeholder="Create a strong password"
+                                               required
+                                               autocomplete="new-password">
+                                        <button type="button" 
+                                                class="password-toggle" 
+                                                onclick="togglePassword('password')">
+                                            <i class="fas fa-eye" id="password-icon"></i>
+                                        </button>
+                                    </div>
+                                    <div class="password-strength mt-2">
+                                        <div class="strength-bar">
+                                            <div class="strength-fill" id="strength-fill"></div>
+                                        </div>
+                                        <small class="strength-text" id="strength-text">Password strength</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="confirm_password" class="form-label">
+                                        <i class="fas fa-lock"></i>
+                                        Confirm Password
+                                    </label>
+                                    <div class="password-input-group">
+                                        <input type="password" 
+                                               class="form-control" 
+                                               id="confirm_password" 
+                                               name="confirm_password" 
+                                               placeholder="Confirm your password"
+                                               required
+                                               autocomplete="new-password">
+                                        <button type="button" 
+                                                class="password-toggle" 
+                                                onclick="togglePassword('confirm_password')">
+                                            <i class="fas fa-eye" id="confirm-password-icon"></i>
+                                        </button>
+                                    </div>
+                                    <div class="password-match mt-2" id="password-match">
+                                        <small class="text-secondary">
+                                            <i class="fas fa-info-circle"></i>
+                                            Passwords must match
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <div class="form-check">
+                                <input type="checkbox" 
+                                       class="form-check-input" 
+                                       id="terms" 
+                                       name="terms" 
+                                       required>
+                                <label for="terms" class="form-check-label">
+                                    I agree to the 
+                                    <a href="#" class="text-gradient">Terms of Service</a> 
+                                    and 
+                                    <a href="#" class="text-gradient">Privacy Policy</a>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <div class="form-check">
+                                <input type="checkbox" 
+                                       class="form-check-input" 
+                                       id="newsletter" 
+                                       name="newsletter">
+                                <label for="newsletter" class="form-check-label">
+                                    Send me updates about new features and coding tips
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary btn-lg w-full mb-3">
+                            <i class="fas fa-user-plus"></i>
+                            Create Account
+                        </button>
+                        
+                        <div class="auth-divider">
+                            <span class="divider-text">or</span>
+                        </div>
+                        
+                        <div class="social-login">
+                            <button type="button" class="btn btn-secondary w-full mb-2">
+                                <i class="fab fa-google"></i>
+                                Sign up with Google
+                            </button>
+                            <button type="button" class="btn btn-secondary w-full mb-2">
+                                <i class="fab fa-github"></i>
+                                Sign up with GitHub
+                            </button>
+                        </div>
+                        
+                        <div class="auth-links text-center mt-4">
+                            <p class="text-secondary">
+                                Already have an account? 
+                                <a href="{{ url_for('auth.login') }}" class="text-gradient">
+                                    Sign in here
+                                </a>
+                            </p>
+                        </div>
+                    </form>
+                </div>
+                
+                <!-- Features Preview -->
+                <div class="features-preview glass mt-4">
+                    <div class="preview-header text-center mb-3">
+                        <h6 class="preview-title">What you'll get:</h6>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="preview-item text-center">
+                                <i class="fas fa-robot text-gradient mb-2"></i>
+                                <h6>AI Tutor</h6>
+                                <p class="text-secondary">Personalized guidance</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="preview-item text-center">
+                                <i class="fas fa-trophy text-gradient mb-2"></i>
+                                <h6>Contests</h6>
+                                <p class="text-secondary">Live competitions</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="preview-item text-center">
+                                <i class="fas fa-users text-gradient mb-2"></i>
+                                <h6>Community</h6>
+                                <p class="text-secondary">Study groups</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.auth-container {
+    padding: 2rem 0;
+}
+
+.auth-card {
+    padding: 3rem 2rem;
+    border-radius: var(--radius-2xl);
+}
+
+.auth-header {
+    margin-bottom: 2rem;
+}
+
+.auth-title {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.auth-subtitle {
+    font-size: 1rem;
+}
+
+.auth-form {
+    margin-bottom: 1rem;
+}
+
+.form-help {
+    margin-top: 0.5rem;
+}
+
+.password-input-group {
+    position: relative;
+}
+
+.password-toggle {
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: var(--radius-sm);
+    transition: var(--transition-fast);
+}
+
+.password-toggle:hover {
+    color: var(--text-primary);
+    background: var(--bg-glass-hover);
+}
+
+.password-strength {
+    margin-top: 0.5rem;
+}
+
+.strength-bar {
+    width: 100%;
+    height: 4px;
+    background: var(--bg-glass);
+    border-radius: var(--radius-full);
+    overflow: hidden;
+    margin-bottom: 0.25rem;
+}
+
+.strength-fill {
+    height: 100%;
+    width: 0%;
+    transition: var(--transition-normal);
+    border-radius: var(--radius-full);
+}
+
+.strength-fill.weak {
+    width: 25%;
+    background: var(--error-color);
+}
+
+.strength-fill.fair {
+    width: 50%;
+    background: var(--warning-color);
+}
+
+.strength-fill.good {
+    width: 75%;
+    background: var(--info-color);
+}
+
+.strength-fill.strong {
+    width: 100%;
+    background: var(--success-color);
+}
+
+.strength-text {
+    font-size: 0.75rem;
+    transition: var(--transition-fast);
+}
+
+.password-match {
+    margin-top: 0.5rem;
+}
+
+.password-match.match {
+    color: var(--success-color);
+}
+
+.password-match.no-match {
+    color: var(--error-color);
+}
+
+.auth-divider {
+    position: relative;
+    text-align: center;
+    margin: 1.5rem 0;
+}
+
+.auth-divider::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: var(--border-primary);
+}
+
+.divider-text {
+    background: var(--bg-primary);
+    padding: 0 1rem;
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+}
+
+.social-login .btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.auth-links a {
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.auth-links a:hover {
+    text-decoration: underline;
+}
+
+.features-preview {
+    padding: 2rem;
+    border-radius: var(--radius-xl);
+}
+
+.preview-header {
+    margin-bottom: 1.5rem;
+}
+
+.preview-title {
+    margin: 0;
+    font-weight: 600;
+}
+
+.preview-item {
+    padding: 1rem;
+}
+
+.preview-item i {
+    font-size: 2rem;
+}
+
+.preview-item h6 {
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+.preview-item p {
+    margin: 0;
+    font-size: 0.875rem;
+}
+
+.w-full {
+    width: 100%;
+}
+
+@media (max-width: 768px) {
+    .auth-card {
+        padding: 2rem 1.5rem;
+    }
+    
+    .auth-title {
+        font-size: 1.75rem;
+    }
+    
+    .features-preview {
+        padding: 1.5rem;
+    }
+    
+    .preview-item {
+        padding: 0.5rem;
+        margin-bottom: 1rem;
+    }
+}
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function togglePassword(fieldId) {
+    const passwordInput = document.getElementById(fieldId);
+    const passwordIcon = document.getElementById(fieldId + '-icon');
+    
+    if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        passwordIcon.className = 'fas fa-eye-slash';
+    } else {
+        passwordInput.type = 'password';
+        passwordIcon.className = 'fas fa-eye';
+    }
+}
+
+// Password strength checker
+document.getElementById('password').addEventListener('input', function() {
+    const password = this.value;
+    const strengthFill = document.getElementById('strength-fill');
+    const strengthText = document.getElementById('strength-text');
+    
+    let strength = 0;
+    let strengthLabel = '';
+    let strengthClass = '';
+    
+    // Length check
+    if (password.length >= 8) strength += 1;
+    if (password.length >= 12) strength += 1;
+    
+    // Character variety checks
+    if (/[a-z]/.test(password)) strength += 1;
+    if (/[A-Z]/.test(password)) strength += 1;
+    if (/[0-9]/.test(password)) strength += 1;
+    if (/[^A-Za-z0-9]/.test(password)) strength += 1;
+    
+    // Determine strength level
+    if (strength <= 2) {
+        strengthLabel = 'Weak';
+        strengthClass = 'weak';
+    } else if (strength <= 3) {
+        strengthLabel = 'Fair';
+        strengthClass = 'fair';
+    } else if (strength <= 4) {
+        strengthLabel = 'Good';
+        strengthClass = 'good';
+    } else {
+        strengthLabel = 'Strong';
+        strengthClass = 'strong';
+    }
+    
+    // Update UI
+    strengthFill.className = 'strength-fill ' + strengthClass;
+    strengthText.textContent = strengthLabel;
+    strengthText.className = 'strength-text ' + strengthClass;
+});
+
+// Password confirmation checker
+document.getElementById('confirm_password').addEventListener('input', function() {
+    const password = document.getElementById('password').value;
+    const confirmPassword = this.value;
+    const matchDiv = document.getElementById('password-match');
+    
+    if (confirmPassword === '') {
+        matchDiv.innerHTML = '<small class="text-secondary"><i class="fas fa-info-circle"></i> Passwords must match</small>';
+        matchDiv.className = 'password-match mt-2';
+    } else if (password === confirmPassword) {
+        matchDiv.innerHTML = '<small class="text-success"><i class="fas fa-check-circle"></i> Passwords match</small>';
+        matchDiv.className = 'password-match mt-2 match';
+    } else {
+        matchDiv.innerHTML = '<small class="text-error"><i class="fas fa-times-circle"></i> Passwords do not match</small>';
+        matchDiv.className = 'password-match mt-2 no-match';
+    }
+});
+
+// Username validation
+document.getElementById('username').addEventListener('input', function() {
+    const username = this.value;
+    const regex = /^[a-zA-Z0-9_]{3,20}$/;
+    
+    if (username && !regex.test(username)) {
+        this.classList.add('border-error');
+        this.classList.remove('border-accent');
+    } else {
+        this.classList.remove('border-error');
+        this.classList.add('border-accent');
+    }
+});
+
+// Form validation
+document.getElementById('registerForm').addEventListener('submit', function(e) {
+    const username = document.getElementById('username').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value;
+    const confirmPassword = document.getElementById('confirm_password').value;
+    const terms = document.getElementById('terms').checked;
+    
+    // Username validation
+    const usernameRegex = /^[a-zA-Z0-9_]{3,20}$/;
+    if (!usernameRegex.test(username)) {
+        e.preventDefault();
+        alert('Username must be 3-20 characters, letters, numbers, and underscores only');
+        document.getElementById('username').focus();
+        return;
+    }
+    
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+        e.preventDefault();
+        alert('Please enter a valid email address');
+        document.getElementById('email').focus();
+        return;
+    }
+    
+    // Password validation
+    if (password.length < 8) {
+        e.preventDefault();
+        alert('Password must be at least 8 characters long');
+        document.getElementById('password').focus();
+        return;
+    }
+    
+    // Password confirmation
+    if (password !== confirmPassword) {
+        e.preventDefault();
+        alert('Passwords do not match');
+        document.getElementById('confirm_password').focus();
+        return;
+    }
+    
+    // Terms agreement
+    if (!terms) {
+        e.preventDefault();
+        alert('You must agree to the Terms of Service and Privacy Policy');
+        document.getElementById('terms').focus();
+        return;
+    }
+});
+
+// Auto-format username
+document.getElementById('username').addEventListener('input', function() {
+    this.value = this.value.toLowerCase().replace(/[^a-z0-9_]/g, '');
+});
+
+// Real-time email validation
+document.getElementById('email').addEventListener('blur', function() {
+    const email = this.value;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    
+    if (email && !emailRegex.test(email)) {
+        this.classList.add('border-error');
+    } else {
+        this.classList.remove('border-error');
+    }
+});
+</script>
+{% endblock %}
